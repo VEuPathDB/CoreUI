@@ -16,6 +16,7 @@ export { Checkbox, Chip } from './components/widgets';
 
 // Containers
 export { Card, Modal } from './components/containers';
+export { default as FullScreenModal } from './components/modals/FullScreenModal';
 
 // Grids
 export { DataGrid, TabbedDisplay } from './components/grids';
