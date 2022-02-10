@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, useMemo } from 'react';
+import { ForwardedRef, forwardRef, useMemo, ReactNode } from 'react';
 
 import { gray } from '../../../definitions/colors';
 import styles from '../../../styleDefinitions';
@@ -8,7 +8,7 @@ export type HeaderProps = {
   /** Underlying HTML element tag to use. */
   size: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   /** The text of the header. */
-  text: string;
+  text: string | ReactNode;
   /** Color of the header text. */
   color?: React.CSSProperties['color'];
   /** Whether or not to underline the text. */
