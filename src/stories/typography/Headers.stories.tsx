@@ -42,6 +42,15 @@ Default.args = {
   useTheme: false,
 };
 
+export const MarkupText = Default.bind({});
+MarkupText.args = {
+  text: <span>I am <i>very</i> excited</span>,
+  additionalStyles: { marginBottom: 0, marginTop: 15 },
+  useTheme: false,
+};
+
+
+
 export const UseTheme: Story<Omit<HeaderProps, 'size'>> = (args) => {
   return (
     <UIThemeProvider
