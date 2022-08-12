@@ -340,7 +340,6 @@ export function reduce<T, U>(fn: Reducer<T, U>, seedValue: U, iterable: Iterable
 
 /** Create a React Element using preformatted HTML */
 export function safeHtml<P>(str: string, props?: P, Component?: React.ComponentClass<P>): JSX.Element;
-export function safeHtml<P>(str: string, props?: P, Component?: React.StatelessComponent<P>): JSX.Element;
 export function safeHtml<P>(str: string, props?: P, Component?: string): JSX.Element;
 export function safeHtml<P>(str = '', props?: P, Component: any = 'span'): JSX.Element {
   // Use innerHTML to auto close tags
