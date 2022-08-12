@@ -677,7 +677,7 @@ function CheckboxTree<T> (props: CheckboxTreeProps<T>) {
         function _findDescendantsWithOneChild(descendant: T): Seq<string> {
           let nextNodes = getNodeId(node) === getNodeId(descendant) || getNodeChildren(descendant).length === 1
             ? Seq.from([ getNodeId(descendant) ])
-            : Seq.empty();
+            : Seq.empty() as Seq<string>;
     
           let remainingNodes = Seq.from(getNodeChildren(descendant)).flatMap(_findDescendantsWithOneChild);
     
