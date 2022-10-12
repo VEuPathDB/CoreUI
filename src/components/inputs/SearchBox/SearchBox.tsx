@@ -4,7 +4,18 @@ import { merge } from 'lodash';
 import { safeHtml } from '../SelectTree/Utils';
 import { Close, Filter } from '../../icons';
 import { Help, Search } from '@material-ui/icons';
-import { Tooltip } from '@material-ui/core';
+import { Theme, Tooltip, withStyles } from '@material-ui/core';
+
+const StyledTooltip = withStyles((theme: Theme) => ({
+  tooltip: {
+    backgroundColor: '#fffde7',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 320,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+    boxShadow: theme.shadows[1],
+  },
+}))(Tooltip);
 
 type Props = {
 
@@ -60,6 +71,7 @@ const defaultStyleSpec: SearchBoxStyleSpec = {
     height: '0.7em',
     color: '#17b',
     marginLeft: '0.25em',
+    cursor: 'pointer',
   },
   optionalIcon: {},
   clearSearchIcon: {
@@ -188,11 +200,12 @@ export default function SearchBox({
       {/* use safeHtml for helpText to allow italic */}
       {!helpText ? 
         null : 
-        <Tooltip
+        <StyledTooltip
           title={safeHtml(helpText)}
+          interactive
         >
           <Help style={styleSpec.helpIcon}/>  
-        </Tooltip>}
+        </StyledTooltip>}
     </div>
   );
 }
