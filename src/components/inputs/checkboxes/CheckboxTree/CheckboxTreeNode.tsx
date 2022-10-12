@@ -162,7 +162,7 @@ export default function CheckboxTreeNode<T>({
           ) : (
             isExpanded ? 
               <ArrowDropDown 
-                style={{color: '#aaa', lineHeight: '1em'}} 
+                style={{color: '#aaa', lineHeight: '1em', cursor: 'pointer'}} 
                 tabIndex={0} 
                 onClick={(e) => {
                   e.stopPropagation();
@@ -171,7 +171,7 @@ export default function CheckboxTreeNode<T>({
                 onKeyDown={(e) => e.key === 'Enter' ? toggleExpansion(node) : null} 
               /> :
               <ArrowRight 
-                style={{color: '#aaa', lineHeight: '1em'}}
+                style={{color: '#aaa', lineHeight: '1em', cursor: 'pointer'}}
                 tabIndex={0} 
                 onClick={(e) => {
                   e.stopPropagation();
