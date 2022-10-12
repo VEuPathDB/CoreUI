@@ -31,7 +31,7 @@ const defaultTreeLinksStyleSpec: TreeLinksStyleSpec = {
     container: {
       display: 'flex',
       justifyContent: 'center',
-      height: '2em',
+      height: 'auto',
       padding: '0.5em 0',
     },
     links: {
@@ -69,11 +69,12 @@ const defaultCheckboxTreeStyleSpec: CheckboxTreeStyleSpec = {
   treeSection: {
     container: {
       flexGrow: 2, 
-      overflowY: 'auto'
+      overflowY: 'auto',
+      margin: '0.5em 0',
     },
     ul: {
       width: '100%', 
-      margin: '0.5em 0', 
+      margin: '0', 
       padding: '0 1em', 
     }
   }
@@ -622,7 +623,7 @@ function CheckboxTree<T> (props: CheckboxTreeProps<T>) {
             isLeafVisible,
             generated: generatedTreeState,
         }
-    }, [tree, isSearchable, searchTerm, searchPredicate, isAdditionalFilterApplied, name, getNodeId, getNodeChildren, props.renderNode, expandedList]);
+    }, [tree, isSearchable, searchTerm, searchPredicate, isAdditionalFilterApplied, name, getNodeId, getNodeChildren, props.renderNode, expandedList, selectedList]);
 
 
     /**
