@@ -93,6 +93,7 @@ const defaultStyleSpec: SearchBoxStyleSpec = {
     borderRadius: '16px',
     padding: '0.2em 1.5em 0.2em 1em',
     width: 'calc(100% - 2.5em)',
+    background: '#fff',
   },
   container: {
     display: 'flex',

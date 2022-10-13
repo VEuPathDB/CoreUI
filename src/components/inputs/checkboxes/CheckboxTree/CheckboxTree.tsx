@@ -54,18 +54,32 @@ const linksHoverDecoration = css({
 
 export type CheckboxTreeStyleSpec = {
   treeLinks?: TreeLinksStyleSpec;
+  searchAndFilterWrapper?: React.CSSProperties;
   searchBox?: SearchBoxStyleSpec;
+  additionalFilters?: {
+    container?: React.CSSProperties;
+  };
   treeNode?: CheckboxTreeNodeStyleSpec;
   treeSection?: {
     container?: React.CSSProperties;
     ul?: React.CSSProperties;
-  }
+  };
 }
 
-const defaultCheckboxTreeStyleSpec: CheckboxTreeStyleSpec = {
+const defaultEdaCheckboxTreeStyleSpec: CheckboxTreeStyleSpec = {
   treeLinks: defaultTreeLinksStyleSpec,
-  treeNode: {},
+  searchAndFilterWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
   searchBox: {},
+  additionalFilters: {
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+    }
+  },
+  treeNode: {},
   treeSection: {
     container: {
       flexGrow: 2, 
@@ -74,11 +88,35 @@ const defaultCheckboxTreeStyleSpec: CheckboxTreeStyleSpec = {
     },
     ul: {
       width: '100%', 
-      margin: '0', 
+      margin: 0, 
       padding: '0 1em', 
     }
   }
 }
+
+const getDefaultGenomicsCheckboxTreeStyleSpec = (isSelectable: boolean, isActiveSearch: boolean): CheckboxTreeStyleSpec => ({
+  ...defaultEdaCheckboxTreeStyleSpec,
+  searchBox: {
+    container: {
+      margin: '0 0.5em',
+    },
+    input: {
+      padding: '0.2em 1em 0.2em 2em',
+      width: 'calc(100% - 3em)',
+    },
+    optionalIcon: {
+      top: '2px',
+    },
+  },  
+  treeNode: {
+    leafNodeLabel: 
+      isSelectable && isActiveSearch ? 
+        { padding: 0, marginLeft: 0 } : { padding: '0.125em 0', marginLeft: '2em' },
+    checkboxLabel: 
+      isSelectable && isActiveSearch ? 
+        { margin: '0.125em 0 0.125em 0.25em' } : { margin: 'auto 0 auto 0.25em' },
+  }
+})
 
 type StatefulNode<T> = T & {
   __expandableTreeState: {
@@ -201,6 +239,8 @@ export type CheckboxTreeProps<T> = {
   wrapTreeSection?: (treeSection: React.ReactNode) => React.ReactNode;
 
   styleOverrides?: CheckboxTreeStyleSpec;
+
+  defaultStyleOverridesToApply?: 'genomics' | 'eda';
 };
 
 type TreeLinkHandler = MouseEventHandler<HTMLButtonElement>;
@@ -333,17 +373,18 @@ function getInitialNodeState<T>(node: T, getNodeChildren: (t: T) => T[]) {
 
 interface AdditionalFiltersProps {
   filters?: React.ReactNode[];
+  filtersStyleSpec?: React.CSSProperties;
 }
 
 /**
  * Renders additional filters to supplement the default searchbox
  */
-function AdditionalFilters({ filters }: AdditionalFiltersProps) {
+function AdditionalFilters({ filters, filtersStyleSpec }: AdditionalFiltersProps) {
   return (
     <>
       {
         filters != null && filters.length > 0 &&
-        <div>
+        <div css={{...filtersStyleSpec}}>
           {
             filters.map((filter, index) => (
               <span key={index}>
@@ -609,11 +650,18 @@ function CheckboxTree<T> (props: CheckboxTreeProps<T>) {
         expandedList,
         renderNoResults,
         styleOverrides = {},
+        defaultStyleOverridesToApply = 'eda',
     } = props;
 
+    const isSearching = useMemo(() => !!searchTerm, [searchTerm]);
+
     const styleSpec: CheckboxTreeStyleSpec = useMemo(() => {
-      return merge({}, defaultCheckboxTreeStyleSpec, styleOverrides)
-    }, [styleOverrides])
+      return merge(
+        {},
+        defaultStyleOverridesToApply === 'eda' ? defaultEdaCheckboxTreeStyleSpec : getDefaultGenomicsCheckboxTreeStyleSpec(!!isSelectable, isSearching), 
+        styleOverrides
+      )
+    }, [styleOverrides, isSelectable, isSearching])
 
     // initialize stateful tree; this immutable tree structure will be replaced with each state change
     const treeState = useMemo(() => {
@@ -839,10 +887,7 @@ function CheckboxTree<T> (props: CheckboxTreeProps<T>) {
       <>
         {linksPosition && linksPosition == LinksPosition.Top ? treeLinks : null}
         {!isSearchable || !showSearchBox ? "" : (
-          <div css={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
+          <div css={{...styleSpec.searchAndFilterWrapper}}>
             <SearchBox
               autoFocus={autoFocusSearchBox}
               searchTerm={searchTerm}
@@ -854,6 +899,7 @@ function CheckboxTree<T> (props: CheckboxTreeProps<T>) {
             />
             <AdditionalFilters
               filters={additionalFilters}
+              filtersStyleSpec={styleSpec.additionalFilters?.container}
             />
           </div>
         )}
