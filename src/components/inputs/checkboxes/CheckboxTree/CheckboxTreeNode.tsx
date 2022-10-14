@@ -3,17 +3,12 @@ import { merge } from 'lodash';
 import { isLeaf } from '../../SelectTree/Utils';
 import IndeterminateCheckbox, { IndeterminateCheckboxProps } from '../IndeterminateCheckbox';
 import { ArrowRight, ArrowDropDown } from '@material-ui/icons';
-import { CSSProperties } from '@emotion/serialize';
 
 export type CheckboxTreeNodeStyleSpec = {
-  list?: {
-    listStyle: CSSProperties['listStyle'],
-  },
-  children?: {
-    padding: CSSProperties['padding']
-    margin: CSSProperties['margin']
-  },
+  list?: React.CSSProperties;
+  children?: React.CSSProperties;
   topLevelNode?: React.CSSProperties;
+  nonTopLevelNodeContainer?: React.CSSProperties;
   leafNodeLabel?: React.CSSProperties;
   nodeLabel?: React.CSSProperties;
   checkboxLabel?: React.CSSProperties;
@@ -27,7 +22,12 @@ const defaultStyleSpec: CheckboxTreeNodeStyleSpec = {
     padding: '0 0 0 1.5em',
     margin: 0,
   },
-  topLevelNode: {},
+  topLevelNode: { 
+    display: 'flex', 
+  },
+  nonTopLevelNodeContainer: {
+    display: 'flex',
+  },
   leafNodeLabel: {
     display: 'flex',
     width: '100%',
@@ -154,7 +154,7 @@ export default function CheckboxTreeNode<T>({
       }}>
         <div 
           css={
-            isTopLevelNode ? { display: 'flex', ...styleSpec.topLevelNode} : {display: 'flex'}
+            isTopLevelNode ? { ...styleSpec.topLevelNode} : { ...styleSpec.nonTopLevelNodeContainer }
           }
         >
           {isLeafNode || isActiveSearch ? (
